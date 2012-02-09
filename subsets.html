@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<title>Finding all the subsets of a set</title>
+</head>
+<body>
+<script type="text/javascript">
+function genSubset(n) {
+
+         var v = [],
+             out = '';
+
+         for(var i=0;i<n;i++) {
+             v[i] = 0
+         }   
+
+         var s = 0;
+
+         do {
+
+            v[n-1]++;
+
+            for(var j=n-1;j>=1;j--) {
+
+                if(v[j]>1) {
+                   v[j] = v[j] - 2;
+                   v[j-1] = v[j-1] + 1;
+                }
+            } 
+
+            out += '{'
+
+            for(var k=0;k<n;k++) {
+                if(v[k]) {
+                   out += (k+1) + ','; 
+                }
+            } 
+
+            out = out.substring(0,out.length-1)
+
+            out += '}'  
+
+            out += '\n'
+
+            s = 0;
+            for(var l=0;l<n;l++) {
+                if(v[l]) s++; 
+            }
+
+         }while(s<n);
+
+   return out.substring(0,out.length-1) + '\n{empty set}';
+}
+
+if(window.console) console.log(genSubset(5))
+</script>
+</body>
+</html>
+

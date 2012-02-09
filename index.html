@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+   <title>Finding all the subsets of a set</title>
+   <style type="text/css">
+    body {
+      font-size:24px;
+      line-height:1.5;
+      color:#333;padding:0 0 0 100px
+    }
+    div#index {
+      width:28em;
+      margin:0 auto;
+    }
+    h1,h2,h3,body { font-family:'gill sans','dejavu sans',verdana,sans-serif; }
+    tt,.aux,.man-ref,pre,h1 { font-family:menlo,'dejavu sans mono',monospace; }
+
+    h1 {
+      font-weight:bold;
+      font-size:80px;
+      letter-spacing:-5px;
+      color:#000;
+      margin-bottom:0;
+      position:relative;
+      left:-50px;
+    }
+    h1 b {
+      color:#ccc;
+    }
+    h3 {
+      font-weight:normal;
+      color:#777;
+      margin-top:-20px;
+      margin-bottom:40px;
+      letter-spacing:2px;
+    }
+    h4 {
+      font-size:26px;
+      color:#111;
+      margin-bottom:0;
+    }
+    h4+p, h4+dl { margin-top:10px }
+
+    pre {
+      margin-left:50px;
+      color:#666;
+    }
+    tt,code { font-size:0.75em; }
+    .aux     { font-size:20px;letter-spacing:1px }
+    .also    { font-size:20px }
+    .copy    {
+      font-size:18px;
+      text-align:left;
+      color:#777;
+      margin-top:50px;
+      padding-top:5px;
+      border-top:1px solid #aaa;
+    }
+    .man-ref { letter-spacing:-1px; }
+.fork img {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+style.css (line 210)
+img {
+    border: 0 none;
+    vertical-align: middle;
+}
+   </style>
+</head>
+<body>
+<a class="fork" href="https://github.com/thinkphp/subsets"><img alt="Fork me on GitHub" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+<h1><b>|</b>Subsets</h1>
+<h3>Finding all the subsets of a set</h3>
+<p class='aux'>
+    <a href='#c'>subsets.c</a>,
+    <a href='#cplusplus'>subsets.c++</a>,
+    <a href='#js'>subsets.js</a>,
+    <a href='#python'>subsets.py</a>,
+    <a href='#php'>subsets.php</a>
+</p>
+<h4>Problem</h4>
+<p>Read an integer n. It's required to find all the subsets of the set {1,2,3,...,n}.</p>
+<h4>Solution</h4>
+
+<p>exemplu: n=3. Multimea {1,2,3} are urmatoarele submultimi: {1,2,3},{1,2},{1,3},{2,3},{1},{2},{3} si 0 multimea vida.</p>
+
+<p>Pentru rezolvarea problemei trebuie sa lamurim modul in care se poate memora o submultime a multimii {1,2,3,...,n}. O submultime
+se poate memora sub unei variable de tip tablou cu n componente, unde fiecare componenta retine 0 sau 1. Componenta i ia valoarea 1 daca
+elementul i apartine submultimii si 0 in caz contrar(o astfel de reprezentare se numeste reprezentare prin vector caracteristic).Exemplu:
+Fie submultimea {1, 2} a multimii {1,2,3}.
+</p>
+<pre>
+  1    1    0 
+v[1] v[2] v[3]
+</pre>
+<p>
+Avem v[1] = 1, pentru ca elementul 1 apartine submultimii considerate, v[2] = 1, pentru ca elementul 2 apartine submultimii si
+v[3] = 0, pentru ca elementul 3 nu apartine submultimii. Si acum, atentie: ce inseamna generarea tuturor submultimilor? Inseamna
+generarea tuturor combinatiilor de 0 si 1 care pot fi retinute de vectorul V. Dar o astfel de combinatie poate fi interpretata
+ca un numar natural scris in binar. Trebuie sa generam toate numerele (in binar) care se pot reprezenta utilizand n cifre. Pornind
+de la 0000.000, se aduna la fiecare pas 1 simuland adunarea in binar. Astfel, obtinem o noua combinatie de 0 si 1 care reprezeinta
+ numarul din pasul precedent la care s-a adunat o unitate. Ne oprim cand a fost scrisa ultima combinatie 111.1111 care
+corespunde celui mai mare numar care poate fi retinut in cele n componente.Cum, testam aceasta? La fiecare pas se calculeaza
+suma numerelor retinute de cele n componente. In momentul in care aceasta este n, inseamna ca au fost generate toate submultimile.      
+</p>
+<pre>
+V         0    0    0
+        V[1] v[2] v[3]
+
+adds 1 and we get
+
+V         0    0    1    this configuration is 1 and subsets {1}
+        V[1] v[2] v[3]
+
+adds 1 and we get
+
+V         0    1    0    this configuration is 2 and subsets {2}
+        V[1] v[2] v[3]
+
+adds 1 and we get
+
+V         0    1    1   this configuration is 3 and subsets {2,3}
+        V[1] v[2] v[3]
+
+adds 1 and we get
+
+V         1    0    0   this configuration is 4 and subsets {3}
+        V[1] v[2] v[3]
+
+adds 1 and we get
+
+V         1    0    1   this configuration is 5 and subsets {1,3}
+        V[1] v[2] v[3]
+
+adds 1 and we get
+
+V         1    1    0   this configuration is 6 and subsets {1,2}
+        V[1] v[2] v[3]
+
+adds 1 and we get
+
+V         1    1    1   this configuration is 6 and subsets {1,2,3}
+        V[1] v[2] v[3]
+
+</pre>
+<p>Una dintre submultimile unei multimi este chiar multimea propriu-zisa. Exista 2^n submultimi plus multimea vida!</p>
+
+<p id="c">subsets.c</p>
+<pre><code>
+#include &#60;stdio.h&#62;
+int vec[9],i,n,s;
+void main() {
+     printf("\nFinding all the subsets of a set:\n");
+     scanf("%d",&n);
+     for(i=0;i&#60;n;i++) {
+	 vec[i++]=0;
+     }
+     do{
+       vec[n-1]++;
+       for(i=n-1; i&#62;0;i--) {
+	   if(vec[i]&#62;1) {
+	      vec[i] -=2;
+	      vec[i-1] +=1;
+	   }
+       }
+       s = 0;
+       for(i=0;i&#60;n;i++) {
+	   s += vec[i];
+       }
+       for(i=0; i&#60;n;i++) {
+	   if(vec[i]){
+	      printf("%d ",i+1);
+	   }
+       }
+       printf("\n");
+     }while(s&#62;n);
+
+     printf("{empty set}");
+}
+</code></pre>
+<p id="cplusplus">subsets.c++</p>
+<pre><code>
+#include &#60;iostream.h&#62;
+#include &#60;conio.h&#62;
+int vec[9],i,n,s;
+void main() {
+     clrscr();
+     cout&#60;&#60;"Finding all the subsets of a set:\n";
+     cout&#60;&#60;"n=";cin&#62;&#62;n;
+     for(i=0;i&#60;n;i++) {
+	 vec[i++]=0;
+     }
+     do{
+       vec[n-1]++;
+       for(i=n-1;i&#62;0;i--) {
+	   if(vec[i]&#62;1) {
+	      vec[i] -=2;
+	      vec[i-1] +=1;
+	   }
+       }
+       s = 0;
+       for(i=0;i&#60;n;i++) {
+	   s += vec[i];
+       }
+       for(i=0;i&#60;n;i++) {
+	   if(vec[i]){
+	      cout&#60;&#60;i+1&#60;&#60;" ";
+	   }
+       }
+       cout&#60;&#60;endl;
+     }while(s&#60;n);
+     cout&#60;&#60;"{empty set}";
+}
+</code></pre>
+<p id="js">subsets.js</p>
+<pre><code>
+//Finding all the subsets of a set
+function genSubset(n) {
+         var v = [],
+             out = '',
+             s = 0;
+         for(var i=0;i&#60;n;i++) {
+             v[i] = 0
+         }   
+         do {
+            v[n-1]++;
+            for(var j=n-1;j&#62;=1;j--) {
+                if(v[j]&#62;1) {
+                   v[j] -= 2;
+                   v[j-1] += 1;
+                }
+            } 
+            out += '{'
+            for(var k=0;k&#60;n;k++) {
+                if(v[k]) {
+                   out += (k+1) + ','; 
+                }
+            } 
+            out = out.substring(0,out.length-1)
+            out += '}'  
+            out += '\n'
+            s = 0
+            for(var l=0;l&#60;n;l++) {
+                if(v[l]) s++
+            }
+         }while(s&#60;n);
+   return out.substring(0,out.length-1) + '\n{empty set}';
+}
+if(window.console) console.log(genSubset(5))
+</code></pre>
+
+<p id="php">subsets.php</p>
+<pre><code>
+echo"&#60;h1&#62;Finding all the subsets of a set&#60;/h1&#62;";
+
+     function subsets($n) {
+          $v = array();
+          for($i=0;$i&#60;$n;$i++) {
+              $v[$i] = 0;
+          } 
+          $out = '';    
+          do {
+             $v[$n-1]++;
+             for($i=$n-1;$i&#62;=1;$i--) {
+                 if($v[$i] &#62; 1) {
+                    $v[$i] -= 2;
+                    $v[$i-1] += 1;
+                 } 
+             }
+             $out .= "{";
+             for($j=0;$j&#60;$n;$j++) {
+                 if($v[$j]) {
+                    $out .= ($j+1) . ',';
+                 }  
+             } 
+             $out .= "}";  
+             $out .= "&#60;br/&#62;";              
+             $s = 0;
+             for($k=0;$k&#60;$n;$k++) {
+                 $s += $v[$k];
+             }
+         } while($s&#60;$n);
+       return $out . "{void}";
+     }
+     echo subsets(3);
+</code></pre>
+
+<p id="python">subsets.py</p>
+<pre><code>
+'''
+  Finding all the subsets of a set.
+'''
+def subsets(n):
+    v = []
+    out = ''
+    for i in range(0,n):
+        v.append(0)
+    s = 0    
+    while s&#60;n:
+      v[n-1] += 1      
+      for j in range(n-1,0,-1):
+          if v[j] > 1:
+             v[j] = 0
+             v[j-1] += 1
+      for i in range(0,n):
+          if v[i]:
+             out += str(i+1) + ' '
+      out += '\n' 
+      s = 0
+      for k in range(0,n):
+          if v[k] == 1:
+             s = s + 1
+    print out
+subsets(3)
+</code></pre>
+<p class="copy">Copyright &copy; 2012 <a href="http://thinkphp.ro">Adrian Statescu</a> | @<a href="http://twitter.com/thinkphp">thinkphp</a></p>
+</body>
+</html>
+
