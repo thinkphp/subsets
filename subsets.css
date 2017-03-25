@@ -1,0 +1,27 @@
+  body{font-family: arial,verdana,sans-serif;font-size: 20px}
+  input{border: 1px solid #ccc;font-size: 40px;padding: 3px;margin: 4px;text-align: center;}
+  input:focus{background: #D8CAFF;text-align:center;}
+h1{text-align: center;}
+.subsets {
+    display: block;
+}
+
+.row {
+    text-align: center;
+}
+
+.cell {
+    border: 1px solid lightgreen;
+    border-width: 1px 0px 0px 1px;
+    display: inline-block;
+    width: 40px;
+    padding: 10px 0px;
+}
+
+.row .cell:last-child {
+    border-right-width: 1px;
+}
+
+.subsets .row:last-child .cell {
+    border-bottom-width: 1px;
+}
