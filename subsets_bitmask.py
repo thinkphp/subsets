@@ -8,7 +8,7 @@ def subsets(nums):
     for i in range(total):
         res.append([])
 
-    for i in range(8):
+    for i in range(len(nums)):
         for j in range(total):
             if ((j>>i)&1) >0:
                 res[j].append(nums[i])
