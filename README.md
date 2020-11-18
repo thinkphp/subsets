@@ -4,3 +4,4 @@ Implementation: C | C++ | JS | PHP | Python | Go | Ruby
 * http://thinkphp.github.com/subsets/
 * http://thinkphp.github.io/subsets/subsets2.html
 * https://ideone.com/brV4VT
+* https://ideone.com/thinkphp/subsets
