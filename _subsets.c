@@ -14,11 +14,10 @@ uint pow2(uint a, uint b) {
  
 	   return res;
 }
- 
- 
+  
 void _generate_subsets(uint dim) {
      
-	 uint n = pow2(2, dim);
+     uint n = pow2(2, dim);
 
      char *fout = "submultimi.out";
  
@@ -30,19 +29,18 @@ void _generate_subsets(uint dim) {
      	{
      		 if(i & (1<<j)) {
                 
-                printf("%d ", (j + 1));
+                      printf("%d ", (j + 1));
      		 }
      	}
  
      	printf("\n");
      }
  
-}
+} 
  
- 
-int main(int argc, char const *argv[])
-{
-	char *fin = "submultimi.in";
+int main(int argc, char const *argv[]) {
+	
+    char *fin = "submultimi.in";
  
     uint len;
  
@@ -52,5 +50,5 @@ int main(int argc, char const *argv[])
  
  	_generate_subsets( len );
  
-	return 0;
+	return(0);
 }
